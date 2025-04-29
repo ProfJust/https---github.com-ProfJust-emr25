@@ -27,7 +27,7 @@ waypoints_joint_angles = [
     [-0.62, -1.38, -1.67, -1.81, 0.37, 2.99],     
 ]
 # Bewegungen mit MoveJ ausführen
-input("Roboter startet Bewegung (MoveJ) nach Eingabe beliebiger Taste")
+# input("Roboter startet Bewegung (MoveJ) nach Eingabe beliebiger Taste")
 for i, ziel_pose in enumerate(waypoints_joint_angles ):
     print(f"➡️  Sende moveL #{i+1}: {ziel_pose}")
     # MoveJ
@@ -42,15 +42,17 @@ for i, ziel_pose in enumerate(waypoints_joint_angles ):
 
 # Liste von kartesischen Zielposen 
 waypoints_kartesian = [
-   [ 0.5, 0.5, 0.5, 0.0, 0.0, 0.0],   
-   [ 0.5, 0.5, 0.1, 0.0, 0.0, 0.0],       
+   [ 0.5, 0.0, 0.0, 0.0, 0.0, 0.0],   
+   [ 0.0, 0.5, 0.0, 0.0, 0.0, 0.0],
+   [ 0.0, 0.0, 0.5, 0.0, 0.0, 0.0],       
 ]
 
 
 # Bewegungen mit MoveL ausführen
-input("Roboter startet Bewegung (MoveL) nach Eingabe beliebiger Taste")
+# input("Roboter startet Bewegung (MoveL) nach Eingabe beliebiger Taste")
 for i, ziel_pose in enumerate(waypoints_kartesian):
-    print(f"➡️  Sende moveL #{i+1}: {ziel_pose}")
+    input("Roboter startet Bewegung (MoveL) nach Eingabe beliebiger Taste")
+    print(f"➡️  Sende moveL: {ziel_pose}")
     # MoveL 
     #------------
     # MoveL bislang ohne Inverse Kinematik, identische Funktion wie MoveJ
