@@ -5,12 +5,11 @@ import json
 import time
 
 # Robotics Toolbox for Python imports für Inverse Kinematik
-import spatialmath as sm  
-# pip install spatialmath-python
-
-from roboticstoolbox import models 
-# pip install roboticstoolbox-python
 # python -m pip install "numpy<2"
+# python -m pip install spatialmath-python roboticstoolbox-python 
+import spatialmath as sm  
+from roboticstoolbox import models 
+
 
 
 # UR3-Modell für IK laden
