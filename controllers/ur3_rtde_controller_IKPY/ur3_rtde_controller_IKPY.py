@@ -11,6 +11,7 @@
 #  29.04.25 
 # OJU added IK to MoveL
 #----------------------------
+from ikpy.chain import Chain  # pip install ikpy
 from controller import Robot
 import socket
 import threading
@@ -34,6 +35,12 @@ GRIPPER_SPEED = 1.0      # Rad/s
 # Initialisiere Webots-Roboter
 robot = Robot()
 timestep = int(robot.getBasicTimeStep())
+
+# Roboterkinematikkette definieren (UR5)
+# URDF File in den selben Ordner wie den Controller legen
+ur3_chain = Chain.from_urdf_file("UR3e.urdf")
+
+
 
 
 # Debug: Zeige alle verfügbaren Devices
@@ -76,9 +83,27 @@ target_joint_angles = HOME_POSITION.copy()
 lock = threading.Lock()
 
 #---------- HIER DIE IK UMSETZEN ----!!!
-def inverse_kinematics(cartesian_pose):   
+def inverse_kinematics(target_position_cartesian):   
     # Pose x,y,z, rx,ry,rz  => 6 Winkel 
-    angles = cartesian_pose # Dummy-Implementierung
+    print(f"➡️  Kartesische Zielkoordinaten : {target_position_cartesian}")
+    target_position = [target_position_cartesian[0], target_position_cartesian[1], target_position_cartesian[2]]
+    target_orientation = [target_position_cartesian[3], target_position_cartesian[4], target_position_cartesian[5]]
+    # IK-Funktion aufrufen
+    ik_results = ur3_chain.inverse_kinematics(target_position=target_position,
+                                           target_orientation=target_orientation,
+                                           orientation_mode="X"  # <- Korrekter Modus
+                                          )
+    print(f"➡️  Target Gelenkwinkel nach IK : {ik_results}")
+
+    # Dummy-Implementierung  angles = target_position_cartesian 
+    angles =[ 0.0, 0.0, 0.0, 0.0, 0.0, 0.0] # 6 Winkel   ik_results liefer 9 Winkel
+    angles[0] = ik_results[1]
+    angles[1] = ik_results[2]
+    angles[2] = ik_results[3]
+    angles[3] = ik_results[4]
+    angles[4] = ik_results[5]
+    angles[5] = ik_results[6]
+    print(f"➡️  Target Gelenkwinkel Angles : {angles}")
     return angles if len(angles) == 6 else None
 #---------- HIER DIE IK UMSETZEN ----!!!
 

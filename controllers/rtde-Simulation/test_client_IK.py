@@ -42,8 +42,8 @@ for i, ziel_pose in enumerate(waypoints_joint_angles ):
 
 # Liste von kartesischen Zielposen 
 waypoints_kartesian = [
-   [ 1.0, -1.0, 1.0, 0.0, 0.0, 0.0],   
-   [ 1.0, -1.0, 1.0, 0.0, 1.57, 0.0],     
+   [ 0.5, 0.5, 0.5, 0.0, 0.0, 0.0],   
+   [ 0.5, 0.5, 0.1, 0.0, 0.0, 0.0],       
 ]
 
 
@@ -64,13 +64,14 @@ for i, ziel_pose in enumerate(waypoints_kartesian):
         print(arg *180.0/3.1415927)
     time.sleep(2)    
 
-# Gripper Aktionen
+"""# Gripper Aktionen
 input("Gripper startet Bewegung nach Eingabe beliebiger Taste")
 gripper.close()
 time.sleep(1)
 input("Gripper startet Bewegung nach Eingabe beliebiger Taste")
 gripper.open()
 time.sleep(1)
+"""
 
 # Abschluss
 rtde_c.disconnect()
