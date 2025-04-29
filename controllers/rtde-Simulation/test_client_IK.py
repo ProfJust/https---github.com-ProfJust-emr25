@@ -9,24 +9,32 @@ rtde_r = RTDEReceiveInterface(UR3_IP)
 rtde_c = RTDEControlInterface(UR3_IP)
 gripper = RobotiqGripper(rtde_c)
 
-# Gripper Aktionen
+input("Roboter startet 1. Bewegung nach Eingabe beliebiger Taste")
+resp = rtde_c.moveL( [ 1.0, 1.0, -0.5, 0.0, 0.0, 0.0], speed=0.5, acceleration=0.3)
+print(f"📥 Antwort: {resp}")
+
+input("Roboter startet 2. Bewegung nach Eingabe beliebiger Taste")
+resp = rtde_c.moveL( [ 1.0, 1.0, -0.5, 0.0, 0.0, 1.57], speed=0.5, acceleration=0.3)
+print(f"📥 Antwort: {resp}")
+
+"""# Gripper Aktionen
 gripper.activate()
 gripper.set_force(50)
 gripper.set_speed(100)
 
-# Liste von kartesischen Zielposen (Dummy → direkt als joint angles interpretiert)
-# MoveL bislang ohne Inverse Kinematik, identische Funktion wie MoveJ
-waypoints = [
-    [-0.19, -2.10, -1.67, -2.75, 0.99, 2.99],   
-    [-0.62, -1.38, -1.67, -1.81, 0.37, 2.99],     
+# Liste von kartesischen Zielposen (IK) bezogen auf das TCP-Koordinatensystem
+# X, Y, Z, RZ, RY, RX (in RAD)
+moveL_ziele = [
+   [ 1.0, -1.0, 1.0, 0.0, 0.0, 0.0],   
+   [ 1.0, -1.0, 1.0, 0.0, 1.57, 0.0],     
 ]
 
-# Bewegungen mit MoveJ ausführen
-input("Roboter startet Bewegung (MoveJ) nach Eingabe beliebiger Taste")
-for i, ziel_pose in enumerate(waypoints ):
+# Bewegungen ausführen
+
+for i, ziel_pose in enumerate(moveL_ziele):
+    input("Roboter startet Bewegung nach Eingabe beliebiger Taste")
     print(f"➡️  Sende moveL #{i+1}: {ziel_pose}")
-    #MoveL resp = rtde_c.moveL(ziel_pose, speed=0.5, acceleration=0.3)
-    resp = rtde_c.moveJ(ziel_pose)
+    resp = rtde_c.moveL(ziel_pose, speed=0.5, acceleration=0.3)
     print(f"📥 Antwort: {resp}")
     actual_q = rtde_r.getActualQ() # in radian
     print("Aktueller Zustand - Gelenkpositionen in Grad ")
@@ -34,21 +42,9 @@ for i, ziel_pose in enumerate(waypoints ):
         print(arg *180.0/3.1415927)
     time.sleep(1)
 
-# Bewegungen mit MoveL ausführen
-input("Roboter startet Bewegung (MoveL) nach Eingabe beliebiger Taste")
-for i, ziel_pose in enumerate(waypoints ):
-    print(f"➡️  Sende moveL #{i+1}: {ziel_pose}")
-    # MoveL
-    resp = rtde_c.moveL(ziel_pose, speed=0.5, acceleration=0.3)
+"""
 
-    print(f"📥 Antwort: {resp}")
-    actual_q = rtde_r.getActualQ() # in radian
-    print("Aktueller Zustand - Gelenkpositionen in Grad ")
-    for arg in actual_q:
-        print(arg *180.0/3.1415927)
-    time.sleep(1)    
-
-# Gripper Aktionen
+"""# Gripper Aktionen
 input("Gripper startet Bewegung nach Eingabe beliebiger Taste")
 gripper.close()
 time.sleep(1)
@@ -56,7 +52,7 @@ input("Gripper startet Bewegung nach Eingabe beliebiger Taste")
 gripper.open()
 time.sleep(1)
 gripper.close()
-time.sleep(1)
+time.sleep(1)"""
 
 # Abschluss
 rtde_c.disconnect()
