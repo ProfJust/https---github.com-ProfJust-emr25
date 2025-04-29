@@ -1,3 +1,10 @@
+# test_client_IK.py
+#----------------------------
+# Testprogramm im RTDE-Style um den UR3e in Webots 
+# für den ur3_rtde_controller
+#-------------------------------------------
+# last edited by OJU 29.04.2025
+#-------------------------------------------
 from rtde_control import RTDEControlInterface
 from rtde_receive import RTDEReceiveInterface
 from robotiq_gripper_control import RobotiqGripper
@@ -23,7 +30,8 @@ waypoints_joint_angles = [
 input("Roboter startet Bewegung (MoveJ) nach Eingabe beliebiger Taste")
 for i, ziel_pose in enumerate(waypoints_joint_angles ):
     print(f"➡️  Sende moveL #{i+1}: {ziel_pose}")
-    #MoveL resp = rtde_c.moveL(ziel_pose, speed=0.5, acceleration=0.3)
+    # MoveJ
+    #----------
     resp = rtde_c.moveJ(ziel_pose)
     print(f"📥 Antwort: {resp}")
     actual_q = rtde_r.getActualQ() # in radian
@@ -44,6 +52,7 @@ input("Roboter startet Bewegung (MoveL) nach Eingabe beliebiger Taste")
 for i, ziel_pose in enumerate(waypoints_kartesian):
     print(f"➡️  Sende moveL #{i+1}: {ziel_pose}")
     # MoveL 
+    #------------
     # MoveL bislang ohne Inverse Kinematik, identische Funktion wie MoveJ
     # (Dummy → direkt als joint angles interpretiert)
     resp = rtde_c.moveL(ziel_pose, speed=0.5, acceleration=0.3)
@@ -61,8 +70,6 @@ gripper.close()
 time.sleep(1)
 input("Gripper startet Bewegung nach Eingabe beliebiger Taste")
 gripper.open()
-time.sleep(1)
-gripper.close()
 time.sleep(1)
 
 # Abschluss
