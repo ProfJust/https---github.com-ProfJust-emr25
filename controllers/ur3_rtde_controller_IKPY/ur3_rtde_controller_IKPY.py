@@ -93,6 +93,13 @@ def inverse_kinematics(target_position_cartesian):
                                            target_orientation=target_orientation,
                                            orientation_mode="X"  # <- Korrekter Modus
                                           )
+    # https://ikpy.readthedocs.io/en/latest/chain.html
+    # https://ikpy.readthedocs.io/en/latest/inverse_kinematics.html
+    # Weitere Optionen für orientation_mode:
+    # "Y": Y-Achse des Endeffektors ausrichten
+    # "Z": Z-Achse des Endeffektors ausrichten
+    # None: Keine Orientierung berücksichtigen (nur Position)
+    # "all": Volle Orientierung (alle drei Achsen, aktuell in IKPy aber nicht unterstützt)
     print(f"➡️  Target Gelenkwinkel nach IK : {ik_results}")
 
     # Dummy-Implementierung  angles = target_position_cartesian 
