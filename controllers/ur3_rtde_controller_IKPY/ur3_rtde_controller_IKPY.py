@@ -12,6 +12,10 @@
 # OJU added IK to MoveL
 #----------------------------
 from ikpy.chain import Chain  # pip install ikpy
+# import numpy as np
+# from scipy.spatial.transform import Rotation
+
+
 from controller import Robot
 import socket
 import threading
@@ -39,6 +43,8 @@ timestep = int(robot.getBasicTimeStep())
 # Roboterkinematikkette definieren (UR5)
 # URDF File in den selben Ordner wie den Controller legen
 ur3_chain = Chain.from_urdf_file("UR3e.urdf")
+print(ur3_chain)
+print(ur3_chain.links)
 
 
 
@@ -86,12 +92,13 @@ lock = threading.Lock()
 def inverse_kinematics(target_position_cartesian):   
     # Pose x,y,z, rx,ry,rz  => 6 Winkel 
     print(f"➡️  Kartesische Zielkoordinaten : {target_position_cartesian}")
-    target_position = [target_position_cartesian[0], target_position_cartesian[1], target_position_cartesian[2]]
+    target_position =    [target_position_cartesian[0], target_position_cartesian[1], target_position_cartesian[2]]    
     target_orientation = [target_position_cartesian[3], target_position_cartesian[4], target_position_cartesian[5]]
+
     # IK-Funktion aufrufen
-    ik_results = ur3_chain.inverse_kinematics(target_position=target_position,
-                                           target_orientation=target_orientation,
-                                           orientation_mode="X"  # <- Korrekter Modus
+    ik_results = ur3_chain.inverse_kinematics(target_position = target_position,
+                                           target_orientation = target_orientation,
+                                           orientation_mode = "Y"  
                                           )
     # https://ikpy.readthedocs.io/en/latest/chain.html
     # https://ikpy.readthedocs.io/en/latest/inverse_kinematics.html
@@ -99,20 +106,26 @@ def inverse_kinematics(target_position_cartesian):
     # "Y": Y-Achse des Endeffektors ausrichten
     # "Z": Z-Achse des Endeffektors ausrichten
     # None: Keine Orientierung berücksichtigen (nur Position)
-    # "all": Volle Orientierung (alle drei Achsen, aktuell in IKPy aber nicht unterstützt)
-    print(f"➡️  Target Gelenkwinkel nach IK : {ik_results}")
+    # "all": Volle Orientierung (alle drei Achsen)
+    # Setzt man z. B. orientation_mode="Y", bleibt die Y-Achse des Endeffektors parallel zum Boden.
+    #  Das ist praktisch, wenn ein Greifer seitlich etwas aufnehmen soll
 
-    # Dummy-Implementierung  angles = target_position_cartesian 
-    angles =[ 0.0, 0.0, 0.0, 0.0, 0.0, 0.0] # 6 Winkel   ik_results liefer 9 Winkel
-    angles[0] = ik_results[1]
+    print(f"➡️  Berechnete Gelenkwinkel nach IK : {ik_results}") 
+
+    angles =[ 0.0, 0.0, 0.0, 0.0, 0.0, 0.0] # 6 Winkel   ik_results liefert 9 Winkel
+    # Kinematic chain name=chain links=['Base link', 'shoulder_pan_joint', 'shoulder_lift_joint', 'elbow_joint', 'wrist_1_joint', 'wrist_2_joint', 'wrist_3_joint', 
+    # 'wrist_3_link_ROBOTIQ 2F-85 Gripper_joint', 'hingejoint'] active_links=[ True  True  True  True  True  True  True  True  True]
+
+
+    angles[0] = ik_results[1]  # shoulder_pan_joint
     angles[1] = ik_results[2]
     angles[2] = ik_results[3]
     angles[3] = ik_results[4]
     angles[4] = ik_results[5]
-    angles[5] = ik_results[6]
+    angles[5] = ik_results[6] # wrist_3_joint
     print(f"➡️  Target Gelenkwinkel Angles : {angles}")
     return angles if len(angles) == 6 else None
-#---------- HIER DIE IK UMSETZEN ----!!!
+#---------- Ende IK UMSETZEN ----!!!
 
 def set_gripper(position):
     if gripper_motor:
@@ -220,3 +233,4 @@ while robot.step(timestep) != -1:
         for name, angle in zip(joint_names, target_joint_angles):
             if name in motors:
                 motors[name].setPosition(angle)
+                # print(name, angle) #debug

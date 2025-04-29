@@ -327,13 +327,7 @@
     <child link="ROBOTIQ 2F-85 Gripper"/>
     <origin xyz="-0.000137 0.089999 -0.000501" rpy="-1.5708 0 0"/>
   </joint>
-  <joint name="hingejoint" type="revolute">
-    <parent link="ROBOTIQ 2F-85 Gripper"/>
-    <child link="right inner knuckle"/>
-    <axis xyz="1 0 0"/>
-    <limit lower="-3.1415" upper="3.1415" effort="150" velocity="3.15"/>
-    <origin xyz="0 0.0127 0.06142" rpy="0.7838 0 0"/>
-  </joint>
+  
   <link name="right inner knuckle">
     <visual>
       <origin xyz="0 0.037 0.0434" rpy="3.141593 1.570793 3.141593"/>
@@ -592,13 +586,7 @@
     <child link="right outer finger"/>
     <origin xyz="0 0.0315 -0.0041" rpy="0 0 0"/>
   </joint>
-  <joint name="hingejoint_0" type="revolute">
-    <parent link="right outer finger"/>
-    <child link="ROBOTIQ 2F-85 Gripper right inner finger"/>
-    <axis xyz="1 0 0"/>
-    <limit lower="-3.1415" upper="3.1415" effort="150" velocity="3.15"/>
-    <origin xyz="0 0.0061 0.0471" rpy="-0.839543 0 0"/>
-  </joint>
+  
   <link name="ROBOTIQ 2F-85 Gripper right inner finger">
     <visual>
       <origin xyz="0 0 0" rpy="3.141593 1.570793 3.141593"/>
@@ -668,13 +656,7 @@
     <child link="right inner finger pad"/>
     <origin xyz="0 -0.02202 0.03242" rpy="-0.028 0 0"/>
   </joint>
-  <joint name="hingejoint_1" type="revolute">
-    <parent link="ROBOTIQ 2F-85 Gripper"/>
-    <child link="left inner knuckle"/>
-    <axis xyz="1 0 0"/>
-    <limit lower="-3.1415" upper="3.1415" effort="150" velocity="3.15"/>
-    <origin xyz="0 -0.0127 0.06142" rpy="0.799464 0 -3.141592"/>
-  </joint>
+ 
   <link name="left inner knuckle">
     <visual>
       <origin xyz="0 0.037 0.0434" rpy="3.141593 1.570793 3.141593"/>
@@ -933,13 +915,7 @@
     <child link="left outer finger"/>
     <origin xyz="0 0.0315 -0.0041" rpy="0 0 0"/>
   </joint>
-  <joint name="hingejoint_2" type="revolute">
-    <parent link="left outer finger"/>
-    <child link="ROBOTIQ 2F-85 Gripper left inner finger"/>
-    <axis xyz="1 0 0"/>
-    <limit lower="-3.1415" upper="3.1415" effort="150" velocity="3.15"/>
-    <origin xyz="0 0.0061 0.0471" rpy="-0.82286 0 0"/>
-  </joint>
+
   <link name="ROBOTIQ 2F-85 Gripper left inner finger">
     <visual>
       <origin xyz="0 0 0" rpy="3.141593 1.570793 3.141593"/>

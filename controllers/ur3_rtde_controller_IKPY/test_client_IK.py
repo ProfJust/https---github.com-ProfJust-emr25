@@ -2,6 +2,8 @@
 #----------------------------
 # Testprogramm im RTDE-Style um den UR3e in Webots 
 # für den ur3_rtde_controller
+#------------------------------------------
+# https://gist.github.com/ItsMichal/4a8fcb330d04f2ccba582286344dd9a7
 #-------------------------------------------
 # last edited by OJU 29.04.2025
 #-------------------------------------------
@@ -9,6 +11,10 @@ from rtde_control import RTDEControlInterface
 from rtde_receive import RTDEReceiveInterface
 from robotiq_gripper_control import RobotiqGripper
 import time
+# import matplotlib.pyplot as plt  # pip install matplotlib
+# from ikpy.utils.plot import plot_chain
+# from ikpy.chain import Chain  # pip install ikpy
+
 
 UR3_IP = "127.0.0.1"
 
@@ -41,28 +47,45 @@ for i, ziel_pose in enumerate(waypoints_joint_angles ):
     time.sleep(2)
 """
 # Liste von kartesischen Zielposen 
+# x,y,z, rx,ry,rz
 waypoints_kartesian = [
-   [ 0.5, 0.0, 0.0, 0.0, 0.0, 0.0],   
-   [ 0.0, 0.5, 0.0, 0.0, 0.0, 0.0],
-   [ 0.0, 0.0, 0.5, 0.0, 0.0, 0.0],       
+   [ 0.5, 0.0, 0.2, 0.0, 1.0, 0.0],
+   [ 0.5, 0.5, 0.2, 0.0, 1.0, 0.0],    
+         
 ]
-
+""" IKPy erwartet bei orientation_mode="X" einen Richtungsvektor für die X-Achse,
+    nicht Euler-Winkel:
+    # Falsch (Euler-Winkel):   target_orientation = [0.0, 0.0, 0.0]
+    # Richtig (X-Achse zeigt in +X-Richtung):
+    target_orientation = [1.0, 0.0, 0.0]  # X-Vektor (Länge > 0!)"""
 
 # Bewegungen mit MoveL ausführen
 # input("Roboter startet Bewegung (MoveL) nach Eingabe beliebiger Taste")
 for i, ziel_pose in enumerate(waypoints_kartesian):
-    input("Roboter startet Bewegung (MoveL) nach Eingabe beliebiger Taste")
+    input("\n Roboter startet Bewegung (MoveL) nach Eingabe beliebiger Taste")
     print(f"➡️  Sende moveL: {ziel_pose}")
     # MoveL 
     #------------
     # MoveL bislang ohne Inverse Kinematik, identische Funktion wie MoveJ
     # (Dummy → direkt als joint angles interpretiert)
     resp = rtde_c.moveL(ziel_pose, speed=0.5, acceleration=0.3)
-
     print(f"📥 Antwort: {resp}")
-    actual_q = rtde_r.getActualQ() # in radian
-    print(f"➡️  Aktueller Zustand - Gelenkpositionen in RAD     : {actual_q}")
     time.sleep(2)    
+    # Ausgabe der aktuellen Werte
+    actual_q = rtde_r.getActualQ() # in radian
+    print(f"➡️  Aktueller Zustand - Gelenkpositionen in RAD     : {actual_q}")  
+
+    """# Figure initialisieren
+    fig, ax = plt.subplots(figsize=(10, 10))
+    ur3_chain = Chain.from_urdf_file("UR3e.urdf")
+    # Kinematikkette plotten
+    plot_chain(
+      ur3_chain, 
+      ik_solution, 
+      ax=ax, 
+      target=[0.5, 0.0, 0.3]  # Optional: Zielposition anzeigen
+    )
+    plt.show()"""
 
 """# Gripper Aktionen
 input("Gripper startet Bewegung nach Eingabe beliebiger Taste")
