@@ -1,9 +1,14 @@
 from rtde_control import RTDEControlInterface
 from rtde_receive import RTDEReceiveInterface
 from robotiq_gripper_control import RobotiqGripper
+
+import sys
+print(sys.executable)
+# C:\Users\olafj\AppData\Local\Programs\Python\Python36-32\python.exe -m pip install roboticstoolbox-python
+
 from roboticstoolbox import models 
 # pip install roboticstoolbox-python
-import spatialmath as sm
+# import spatialmath as sm
 import time
 import math
 
